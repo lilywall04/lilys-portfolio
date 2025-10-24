@@ -4,9 +4,11 @@ export default function header() {
   header.innerHTML = `
     <h1>Lily's Portfolio</h1>
     <nav>
-      <a href="#about">About Me</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
+      <a href="#me">Meeeee</a>
+      <a href="#favs">Favs</a>
+      <a href="#music">Music</a>
+      <a href="#cats">Cats</a>
+
     </nav>
   `;
   return header;

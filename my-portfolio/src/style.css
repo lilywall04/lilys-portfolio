@@ -8,6 +8,9 @@
   --card-bg: rgba(255, 255, 255, 0.1);
   --card-border: rgba(255, 255, 255, 0.2);
   --transition-speed: 0.3s;
+
+  /* layout */
+  --page-gutter: 2rem; /* keep page padding consistent */
 }
 
 /* ===== ✨ Global Styles ===== */
@@ -23,32 +26,75 @@ body {
   color: var(--text-color);
   min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 2rem;
+
+  /* remove top padding so header touches top of viewport */
+  padding: 0 var(--page-gutter) var(--page-gutter);
+  overflow-x: hidden;
 }
 
-/* ===== 💫 Header ===== */
+/* ===== 💫 Header (Full-Bleed Hero Bar) ===== */
 header {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 1.5rem;
-  padding: 2rem 3rem;
+  inline-size: 100vw;
+  margin-inline: calc(50% - 50vw);
+
+  /* remove internal top spacing that made it look offset */
+  padding: 3rem calc(var(--page-gutter) + 2rem);
+
+  background: linear-gradient(
+    90deg,
+    rgba(255, 116, 198, 0.25),
+    rgba(164, 127, 255, 0.25),
+    rgba(103, 211, 255, 0.25)
+  );
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 1.2s ease-in-out;
-  width: min(90%, 800px);
+  text-align: center;
+  box-shadow: 0 0 40px rgba(164, 127, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* moving gradient wave effect */
+header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -50%;
+  width: 200%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--accent-pink),
+    var(--accent-purple),
+    var(--accent-blue)
+  );
+  animation: wave 8s ease-in-out infinite alternate;
+}
+
+@keyframes wave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-25%);
+  }
 }
 
 /* ===== 🩷 Title ===== */
 header h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 1rem;
   letter-spacing: 1px;
-  background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue));
+  background: linear-gradient(90deg, #fff7fb 0%, #f0e8ff 40%, #d8f6ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+
+  /* subtle glow to lift from background */
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6),
+    0 0 25px rgba(255, 255, 255, 0.3);
 }
 
 /* ===== 🔗 Navigation ===== */
@@ -87,7 +133,76 @@ nav a:hover::after {
   width: 100%;
 }
 
-/* ===== 🌟 Animations ===== */
+/* ===== 💫 About Section (Glow Border Style) ===== */
+#about {
+  position: relative;
+  padding: 3rem 2rem;
+  margin-top: 4rem;
+  text-align: center;
+  width: min(90%, 800px);
+  margin-inline: auto;
+}
+
+/* 🌈 Animated border glow */
+#about::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  padding: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--accent-pink),
+    var(--accent-purple),
+    var(--accent-blue)
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  animation: borderFlow 6s linear infinite;
+}
+
+/* Subtle gradient behind the text */
+#about::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 140, 207, 0.1),
+    rgba(103, 211, 255, 0.1)
+  );
+  z-index: -1;
+}
+
+#about h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#about p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #ffffffcc;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* Animation for border movement */
+@keyframes borderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* ===== 🌟 Generic Fade-In (if needed) ===== */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -97,4 +212,187 @@ nav a:hover::after {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ===== 💎 Cards Section ===== */
+#cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 4rem;
+  margin-bottom: 6rem; /* 🌟 new space before footer */
+  width: 100%;
+  text-align: left;
+}
+
+/* ===== 🩷 Individual Card ===== */
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  overflow: hidden;
+  width: 18rem;
+}
+
+/* Subtle hover lift effect */
+.card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(164, 127, 255, 0.3);
+}
+
+/* ===== 📸 Card Image ===== */
+.card-img-top {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ===== ✨ Card Body ===== */
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(90deg, #ffa6da, #c79aff, #8de8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4),
+    0 0 18px rgba(255, 255, 255, 0.2);
+}
+
+.card-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #f5f5f5;
+  opacity: 0.9;
+}
+
+/* ===== 🌈 Card Button ===== */
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.3rem;
+  font-weight: 600;
+  border-radius: 2rem;
+  background: linear-gradient(90deg, #ffa6da, #c79aff, #8de8ff);
+  border: none;
+  color: #fff;
+  text-decoration: none;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.15);
+  transform: scale(1.05);
+}
+
+/* ===== 🌌 Footer ===== */
+#footer {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw); /* full-bleed alignment */
+  padding: 3rem 1.5rem;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 116, 198, 0.2),
+    rgba(164, 127, 255, 0.2),
+    rgba(103, 211, 255, 0.25)
+  );
+  backdrop-filter: blur(12px);
+  text-align: center;
+  box-shadow: 0 -10px 30px rgba(164, 127, 255, 0.2);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* soft glowing line across top of footer */
+#footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 3px;
+  background: linear-gradient(90deg, #ffa6da, #c79aff, #8de8ff);
+  animation: waveFooter 8s ease-in-out infinite alternate;
+}
+
+@keyframes waveFooter {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-25%); }
+}
+
+.footer-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.footer-content h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #ffa6da, #c79aff, #8de8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.4),
+    0 0 18px rgba(255, 255, 255, 0.2);
+}
+
+.footer-content p {
+  color: #f8f8f8;
+  opacity: 0.9;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ===== 🔗 Footer Links ===== */
+.footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #ffa6da, #8de8ff);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.footer-links a:hover {
+  color: #8de8ff;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+.footer-copy {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-top: 1.5rem;
 }
